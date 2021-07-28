@@ -9,6 +9,27 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/activity_main">
 
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="radioButton"
+        tools:layout_editor_absoluteX="193dp"
+        tools:layout_editor_absoluteY="72dp" />
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="radioButton"
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="126dp" />
+
+    <androidx.appcompat.widget.AppCompatRadioButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="radioButton"
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="194dp" />
+
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"
