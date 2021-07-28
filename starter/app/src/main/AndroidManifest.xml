@@ -28,8 +28,9 @@
             android:exported="true"
             android:enabled="true"
             >
+            <!-- TODO: DOWNLOAD_COMPLETE not showing up as option for .action-->
             <intent-filter>
-                <action android:name="android.intent.action"/>
+                <action android:name="android.intent.action."/>
 
             </intent-filter>
 
