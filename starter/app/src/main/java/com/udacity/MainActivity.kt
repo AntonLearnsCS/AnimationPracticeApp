@@ -15,12 +15,26 @@ import android.os.Bundle
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
+private val NOTIFICATION_ID = 0
 
 class MainActivity : AppCompatActivity() {
-    private val NOTIFICATION_ID = 0
+    init {
+     /*   val notificationManager = this.let {
+            ContextCompat.getSystemService(
+                it,
+                NotificationManager::class.java
+            )
+        } as NotificationManager
+
+        notificationManager.sendNotification(
+            this.getText(R.string.app_description).toString(),
+            this
+        )*/
+    }
 
     private var downloadID: Long = 0
 
@@ -39,45 +53,36 @@ class MainActivity : AppCompatActivity() {
         custom_button.setOnClickListener {
             download()
         }
+         notificationManager = this.getSystemService(
+            NotificationManager::class.java
+        ) as NotificationManager
+
     createChannel(
         //since the channel and send notification uses the same channel_id, the notification will be passed through said channel
         getString(R.string.notification_id),
         getString(R.string.notification_name))
     }
-
+    //Context-registered receivers
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
+            //"EXTRA_DOWNLOAD_ID" - Intent extra included with ACTION_DOWNLOAD_COMPLETE intents, indicating the ID
+            // (as a long) of the download that just completed.
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
+
+            if (context != null) {
+                notificationManager.sendNotification(
+                    context.getText(R.string.app_description).toString(),
+                    context
+                )
+            }
         }
     }
     //when to call this function, in a broadcast class?
-    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
-        val detailIntent = Intent(applicationContext, DetailActivity::class.java)
-        val contentPendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            NOTIFICATION_ID,
-            detailIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        val builder = NotificationCompat.Builder(
-            applicationContext,
-            applicationContext.getString(R.string.notification_id)
-        )
-            .setSmallIcon(R.drawable.ic_launcher_background)
-            .setContentTitle(applicationContext
-                .getString(R.string.notification_title))
-            .setContentIntent(contentPendingIntent)
-            .setAutoCancel(true)
-            .setContentText(messageBody)
-            .build()
-
-        notify(NOTIFICATION_ID, builder)
-    }
 
         @RequiresApi(Build.VERSION_CODES.O)
     private fun createChannel(channelId: String, channelName: String) {
-        // TODO: Step 1.6 START create a channel
+
+            // TODO: Step 1.6 START create a channel
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val notificationChannel = NotificationChannel(
                 channelId,
@@ -91,9 +96,7 @@ class MainActivity : AppCompatActivity() {
             notificationChannel.lightColor = Color.RED
             notificationChannel.enableVibration(true)
             notificationChannel.description = "Download complete"
-            val notificationManager = this.getSystemService(
-                NotificationManager::class.java
-            )
+
             notificationManager.createNotificationChannel(notificationChannel)
         }
     }
@@ -109,6 +112,7 @@ class MainActivity : AppCompatActivity() {
                 .setAllowedOverRoaming(true)
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+        //an ID for the download, unique across the system. This ID is used to make future calls related to this download.
         downloadID =
             downloadManager.enqueue(request)// enqueue puts the download request in the queue.
     }
@@ -118,5 +122,36 @@ class MainActivity : AppCompatActivity() {
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val CHANNEL_ID = "channelId"
     }
+}
+//Note: Each scope function adds context to the one that already exists (context of our class or outer function).
+//So since we want to use this extension function outside of our MainActivity class, we define the extension function outside of
+//said class
+fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
+    //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
+    val detailIntent = Intent(applicationContext, DetailActivity::class.java)
+    val contentPendingIntent = PendingIntent.getActivity(
+        applicationContext,
+        NOTIFICATION_ID,
+        detailIntent,
+        PendingIntent.FLAG_UPDATE_CURRENT
+    )
+
+    val builder = NotificationCompat.Builder(
+        applicationContext,
+        applicationContext.getString(R.string.notification_id)
+    )
+        .setSmallIcon(R.drawable.ic_launcher_background)
+        .setContentTitle(applicationContext
+            .getString(R.string.notification_title))
+        .setContentIntent(contentPendingIntent)
+        .setAutoCancel(true)
+        .setContentText(messageBody)
+        .build()
+
+    notify(NOTIFICATION_ID, builder)
+}
+
+fun NotificationManager.cancelNotifications() {
+    cancelAll()
 }

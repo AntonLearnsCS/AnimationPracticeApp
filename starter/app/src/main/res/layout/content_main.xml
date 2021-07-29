@@ -10,34 +10,46 @@
     tools:showIn="@layout/activity_main">
 
     <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/appCompatRadioButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="radioButton"
-        tools:layout_editor_absoluteX="193dp"
-        tools:layout_editor_absoluteY="72dp" />
+        app:layout_constraintBottom_toTopOf="@+id/appCompatRadioButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/appCompatRadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="radioButton"
-        tools:layout_editor_absoluteX="182dp"
-        tools:layout_editor_absoluteY="126dp" />
+        app:layout_constraintBottom_toTopOf="@+id/appCompatRadioButton3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatRadioButton2" />
 
     <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/appCompatRadioButton3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="radioButton"
-        tools:layout_editor_absoluteX="182dp"
-        tools:layout_editor_absoluteY="194dp" />
+        app:layout_constraintBottom_toTopOf="@+id/custom_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appCompatRadioButton" />
 
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="60dp"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
