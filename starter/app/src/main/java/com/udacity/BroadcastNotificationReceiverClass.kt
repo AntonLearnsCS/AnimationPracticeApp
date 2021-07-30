@@ -10,17 +10,20 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 
 //may not be needed
+/*
 class BroadcastNotificationReceiverClass : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
 //        TODO("Not yet implemented")
-        /*val notificationManager = context?.let {
+        */
+/*val notificationManager = context?.let {
             ContextCompat.getSystemService(
                 it,
                 NotificationManager::class.java
             )
         } as NotificationManager
 
-         */
+         *//*
+
         val notificationManager = context?.let {
             ContextCompat.getSystemService(
                 it,
@@ -33,4 +36,4 @@ class BroadcastNotificationReceiverClass : BroadcastReceiver() {
             context
         )
     }
-}
+}*/

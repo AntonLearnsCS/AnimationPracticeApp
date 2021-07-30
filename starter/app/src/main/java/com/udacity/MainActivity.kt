@@ -12,46 +12,72 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.RadioButton
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
-import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelStore
+import com.udacity.databinding.ContentMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 
 private val NOTIFICATION_ID = 0
 
 class MainActivity : AppCompatActivity() {
-    init {
-     /*   val notificationManager = this.let {
-            ContextCompat.getSystemService(
-                it,
-                NotificationManager::class.java
-            )
-        } as NotificationManager
-
-        notificationManager.sendNotification(
-            this.getText(R.string.app_description).toString(),
-            this
-        )*/
-    }
 
     private var downloadID: Long = 0
 
     private lateinit var notificationManager: NotificationManager
     private lateinit var pendingIntent: PendingIntent
+    //for actions like snooze
     private lateinit var action: NotificationCompat.Action
+    private lateinit var viewModel : ViewModel
+
+    private var i = 0
+    private val handler = Handler(Looper.getMainLooper()).postDelayed({
+        // Your Code
+        progressBar!!.progress = i
+    }, 3000)
+
+    /*    val binding: ContentMainBinding = DataBindingUtil.inflate(
+        layoutInflater, R.layout.content_main, C, false)*/
+
+
+    private var progressBar: ProgressBar? = null
+
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-
         custom_button.setOnClickListener {
-            download()
+
+                if (viewModel.currentUrl.value != null)
+                {
+                    download()
+                    Toast.makeText(applicationContext, "Select downloadable item", Toast.LENGTH_SHORT).show()
+                    //set state
+                    custom_button.setMyButtonState(ButtonState.Clicked)
+                    custom_button.setMyButtonState(ButtonState.Loading)
+                }
+                else
+                {
+                    Toast.makeText(applicationContext, "Select downloadable item", Toast.LENGTH_SHORT).show()
+
+                }
         }
          notificationManager = this.getSystemService(
             NotificationManager::class.java
@@ -61,7 +87,36 @@ class MainActivity : AppCompatActivity() {
         //since the channel and send notification uses the same channel_id, the notification will be passed through said channel
         getString(R.string.notification_id),
         getString(R.string.notification_name))
+
+        viewModel = ViewModelProvider(this).get(ViewModel::class.java)
     }
+
+
+
+    fun onRadioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.appLoad ->
+                    if (checked) {
+                        viewModel.setUrl(AppUrl)
+                    }
+                R.id.glide ->
+                    if (checked) {
+                        viewModel.setUrl(GlideUrl)
+                    }
+                R.id.retrofit ->
+                    if (checked)
+                    {
+                        viewModel.setUrl(RetrofitUrl)
+                    }
+            }
+        }
+    }
+
     //Context-registered receivers
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -75,6 +130,7 @@ class MainActivity : AppCompatActivity() {
                     context
                 )
             }
+            custom_button.setMyButtonState(ButtonState.Completed)
         }
     }
     //when to call this function, in a broadcast class?
@@ -104,7 +160,7 @@ class MainActivity : AppCompatActivity() {
 //Clients may request that a URI be downloaded to a particular destination file.
     private fun download() {
         val request =
-            DownloadManager.Request(Uri.parse(URL))
+            DownloadManager.Request(Uri.parse(viewModel.currentUrl.value))
                 .setTitle(getString(R.string.app_name))
                 .setDescription(getString(R.string.app_description))
                 .setRequiresCharging(false)
@@ -118,40 +174,47 @@ class MainActivity : AppCompatActivity() {
     }
 
     companion object {
-        private const val URL =
+        private const val AppUrl =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
+
+        private const val GlideUrl = "https://github.com/bumptech/glide/archive/refs/heads/master.zip"
+
+        private const val RetrofitUrl = "https://github.com/square/retrofit/archive/refs/heads/master.zip"
+
         private const val CHANNEL_ID = "channelId"
     }
-}
-//Note: Each scope function adds context to the one that already exists (context of our class or outer function).
-//So since we want to use this extension function outside of our MainActivity class, we define the extension function outside of
+    //Note: Each scope function adds context to the one that already exists (context of our class or outer function).
+//So since we want to use this extension function outside of our MainActivity class, we define the extension function inside of
 //said class
-fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
-    //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
-    val detailIntent = Intent(applicationContext, DetailActivity::class.java)
-    val contentPendingIntent = PendingIntent.getActivity(
-        applicationContext,
-        NOTIFICATION_ID,
-        detailIntent,
-        PendingIntent.FLAG_UPDATE_CURRENT
-    )
+    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
 
-    val builder = NotificationCompat.Builder(
-        applicationContext,
-        applicationContext.getString(R.string.notification_id)
-    )
-        .setSmallIcon(R.drawable.ic_launcher_background)
-        .setContentTitle(applicationContext
-            .getString(R.string.notification_title))
-        .setContentIntent(contentPendingIntent)
-        .setAutoCancel(true)
-        .setContentText(messageBody)
-        .build()
+        //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
+        val detailIntent = Intent(applicationContext, DetailActivity::class.java)
 
-    notify(NOTIFICATION_ID, builder)
-}
+        pendingIntent = PendingIntent.getActivity(
+            applicationContext,
+            NOTIFICATION_ID,
+            detailIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT
+        )
 
-fun NotificationManager.cancelNotifications() {
-    cancelAll()
+        val builder = NotificationCompat.Builder(
+            applicationContext,
+            applicationContext.getString(R.string.notification_id)
+        )
+            .setSmallIcon(R.drawable.ic_assistant_black_24dp)
+            .setContentTitle(applicationContext
+                .getString(R.string.notification_title)) //R
+            .setContentIntent(pendingIntent)
+            .setAutoCancel(true)
+            .setContentText(messageBody)
+            .build()
+
+        notify(NOTIFICATION_ID, builder)
+    }
+
+    fun NotificationManager.cancelNotifications() {
+        cancelAll()
+    }
 }

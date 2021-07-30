@@ -1,46 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".MainActivity"
+    tools:showIn="@layout/activity_main">
+
+<androidx.constraintlayout.widget.ConstraintLayout
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    >
 
+  <!--  we shouldn't nest view groups in Constraint Layout so can't use RadioGroup
+        -->
     <androidx.appcompat.widget.AppCompatRadioButton
-        android:id="@+id/appCompatRadioButton2"
+        android:id="@+id/glide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="radioButton"
-        app:layout_constraintBottom_toTopOf="@+id/appCompatRadioButton"
+        android:text="Glide"
+        android:onClick="onRadioButtonClicked"
+        app:layout_constraintBottom_toTopOf="@+id/appLoad"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatRadioButton
-        android:id="@+id/appCompatRadioButton"
+  <TextView
+      android:id="@+id/textView"
+      android:layout_width="38dp"
+      android:layout_height="15dp"
+      android:layout_marginTop="328dp"
+      android:layout_marginEnd="40dp"
+      android:text="TextView"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
+  <androidx.appcompat.widget.AppCompatRadioButton
+        android:id="@+id/appLoad"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="radioButton"
-        app:layout_constraintBottom_toTopOf="@+id/appCompatRadioButton3"
+        android:text="appLoad"
+        android:onClick="onRadioButtonClicked"
+        app:layout_constraintBottom_toTopOf="@+id/retrofit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatRadioButton2" />
+        app:layout_constraintTop_toBottomOf="@+id/glide" />
 
     <androidx.appcompat.widget.AppCompatRadioButton
-        android:id="@+id/appCompatRadioButton3"
+        android:id="@+id/retrofit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="radioButton"
+        android:text="retrofit"
+        android:onClick="onRadioButtonClicked"
         app:layout_constraintBottom_toTopOf="@+id/custom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/appCompatRadioButton" />
+        app:layout_constraintTop_toBottomOf="@+id/glide" />
 
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
@@ -52,4 +71,21 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+  <ProgressBar
+      android:id="@+id/progress_Bar"
+      style="?android:attr/progressBarStyle"
+      android:layout_width="84dp"
+      android:layout_height="50dp"
+      android:indeterminate="true"
+      android:max="100"
+      android:minWidth="200dp"
+      android:minHeight="50dp"
+      android:progress="0"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.938"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
