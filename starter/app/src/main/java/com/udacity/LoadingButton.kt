@@ -9,6 +9,12 @@ import android.view.View
 import android.view.animation.Animation
 import android.widget.Toast
 import kotlinx.android.synthetic.main.content_main.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.NonCancellable.start
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.withContext
+import kotlin.coroutines.coroutineContext
 import kotlin.properties.Delegates
 import kotlin.time.Duration
 
@@ -33,14 +39,14 @@ class LoadingButton @JvmOverloads constructor(
     // Instances of this class are obtainable by the :: operator.
     //.observable means that the ButtonState instances are able to be observed
     //it seems that every Delegate will have the "p", "old" and "new" variables to be manipulated
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) {p, old, new ->
+    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         //we call "new" b/c it is the most recent value passed in
         when(new)
         {
             ButtonState.Loading ->
             {
                 // will animate draw the rectangle's width based on "progress"
-                btnAnimator()
+            btnAnimator()
 
 
             }
@@ -116,7 +122,7 @@ class LoadingButton @JvmOverloads constructor(
     return true
     }
 
-    fun btnAnimator() {
+     fun btnAnimator() {
         var objectAnimator = ObjectAnimator()
         objectAnimator.setObjectValues(0F,2500F).apply {
             objectAnimator.setDuration(2000)
@@ -127,6 +133,7 @@ class LoadingButton @JvmOverloads constructor(
                 progress = valueAnimator.animatedValue as Float
             }
         }
+        start()
 //copied
        /* btnValueAnimator = ValueAnimator.ofFloat(0F, 2500F).apply {
             duration = 2000
