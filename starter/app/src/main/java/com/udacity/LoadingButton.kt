@@ -1,25 +1,34 @@
 package com.udacity
 
+import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
-import android.graphics.drawable.shapes.RectShape
 import android.util.AttributeSet
 import android.view.View
+import android.view.animation.Animation
 import android.widget.Toast
-import androidx.core.graphics.blue
-import androidx.core.graphics.green
+import kotlinx.android.synthetic.main.content_main.view.*
 import kotlin.properties.Delegates
+import kotlin.time.Duration
 
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
+    private var btnValueAnimator = ValueAnimator()
+    var progress = 0F
 
-    private var widthSize = 0
-    private var heightSize = 0
+    private var loadingTextWidth = 0
+    private var loadingTextHeight = 0
+
+    private var circleX = 6F
+    private var circleY = 6F
+    private var circleRadius = 40F
+
     private val tlbuffer = R.dimen.button_margin
     private val brbuffer = R.dimen.button_bottom_right_margin
 
+    private var circleAnimator = ObjectAnimator()
     // KProperty<*>, ButtonState, ButtonState  "kproperty" - Represents a property, such as a named val or var declaration.
     // Instances of this class are obtainable by the :: operator.
     //.observable means that the ButtonState instances are able to be observed
@@ -30,9 +39,16 @@ class LoadingButton @JvmOverloads constructor(
         {
             ButtonState.Loading ->
             {
+                // will animate draw the rectangle's width based on "progress"
+                btnAnimator()
+
 
             }
 
+            ButtonState.Completed ->
+            {
+
+            }
         }
     }
 
@@ -54,8 +70,8 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        widthSize = width
-        heightSize = height
+        loadingTextWidth = width
+        loadingTextHeight = height
     }
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -63,7 +79,20 @@ class LoadingButton @JvmOverloads constructor(
         canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), (brbuffer - tlbuffer).toFloat()
             , paint)
         paint.color = Color.BLACK
-        canvas?.drawText("Button",(widthSize/2).toFloat(),(heightSize/2).toFloat(), paint)
+        canvas?.drawText("Button",(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
+
+        //Q: Can you dynamically fill a circle drawn from Canvas?
+        canvas?.drawCircle(loadingTextWidth-circleRadius,loadingTextHeight-circleRadius,circleRadius,paint)
+        //TODO: Clip canvas before adding customView
+
+        if (buttonState == ButtonState.Loading)
+        {
+            paint.color = Color.CYAN
+            //will overlay
+            canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), progress, loadingTextHeight.toFloat(), paint)
+        }
+
+
     }
     //Measure the view and its content to determine the measured width and the measured height.
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -74,8 +103,8 @@ class LoadingButton @JvmOverloads constructor(
             heightMeasureSpec,
             0
         )
-        widthSize = w
-        heightSize = h
+        loadingTextWidth = w
+        loadingTextHeight = h
         setMeasuredDimension(w, h)
     }
 //The call to super.performClick() must happen first, which enables accessibility events as well as calls onClickListener().
@@ -85,5 +114,32 @@ class LoadingButton @JvmOverloads constructor(
     Toast.makeText(this.context, "Clicked Button", Toast.LENGTH_SHORT).show()
 
     return true
+    }
+
+    fun btnAnimator() {
+        var objectAnimator = ObjectAnimator()
+        objectAnimator.setObjectValues(0F,2500F).apply {
+            objectAnimator.setDuration(2000)
+            objectAnimator.repeatCount = Animation.INFINITE
+            objectAnimator.repeatMode = ValueAnimator.RESTART
+            ValueAnimator.AnimatorUpdateListener{
+                valueAnimator ->
+                progress = valueAnimator.animatedValue as Float
+            }
+        }
+//copied
+       /* btnValueAnimator = ValueAnimator.ofFloat(0F, 2500F).apply {
+            duration = 2000
+            repeatCount = ValueAnimator.INFINITE
+            repeatMode = ValueAnimator.RESTART
+            ValueAnimator.AnimatorUpdateListener { valueAnimator ->
+                progress = valueAnimator.animatedValue as Float
+                // valueAnimator.interpolator = LinearInterpolator()         // default, so not really needed
+                custom_button.invalidate()
+            }
+            // disable during animation
+           // btnValueAnimator.disableDuringAnimation(custom_button)
+            start()
+        }*/
     }
 }

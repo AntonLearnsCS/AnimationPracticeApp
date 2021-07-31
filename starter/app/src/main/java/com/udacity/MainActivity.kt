@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.animation.ObjectAnimator
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -42,17 +43,17 @@ class MainActivity : AppCompatActivity() {
     private lateinit var action: NotificationCompat.Action
     private lateinit var viewModel : ViewModel
 
-    private var i = 0
+    /*private var i = 0
     private val handler = Handler(Looper.getMainLooper()).postDelayed({
         // Your Code
         progressBar!!.progress = i
     }, 3000)
 
-    /*    val binding: ContentMainBinding = DataBindingUtil.inflate(
-        layoutInflater, R.layout.content_main, C, false)*/
+    *//*    val binding: ContentMainBinding = DataBindingUtil.inflate(
+        layoutInflater, R.layout.content_main, C, false)*//*
 
 
-    private var progressBar: ProgressBar? = null
+    private var progressBar: ProgressBar? = null*/
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -212,6 +213,12 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         notify(NOTIFICATION_ID, builder)
+    }
+    fun horizontalLoadingScreen ()
+    {
+       // val animator = ObjectAnimator.ofArgb(custom_button,"backgroundColor", Color.)
+
+
     }
 
     fun NotificationManager.cancelNotifications() {
