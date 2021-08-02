@@ -30,6 +30,7 @@ import androidx.lifecycle.ViewModelStore
 import com.udacity.databinding.ContentMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.coroutines.InternalCoroutinesApi
 
 private val NOTIFICATION_ID = 0
 
@@ -56,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     private var progressBar: ProgressBar? = null*/
 
 
+    @InternalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -119,6 +121,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //Context-registered receivers
+    @InternalCoroutinesApi
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             //"EXTRA_DOWNLOAD_ID" - Intent extra included with ACTION_DOWNLOAD_COMPLETE intents, indicating the ID

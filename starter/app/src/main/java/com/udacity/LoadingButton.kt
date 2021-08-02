@@ -23,6 +23,7 @@ class LoadingButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     private var btnValueAnimator = ValueAnimator()
     var progress = 0F
+    private var buttonText = ""
 
     private var loadingTextWidth = 0
     private var loadingTextHeight = 0
@@ -39,6 +40,7 @@ class LoadingButton @JvmOverloads constructor(
     // Instances of this class are obtainable by the :: operator.
     //.observable means that the ButtonState instances are able to be observed
     //it seems that every Delegate will have the "p", "old" and "new" variables to be manipulated
+    @InternalCoroutinesApi
     private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         //we call "new" b/c it is the most recent value passed in
         when(new)
@@ -46,6 +48,7 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Loading ->
             {
                 // will animate draw the rectangle's width based on "progress"
+                buttonText = "LOADING..."
             btnAnimator()
 
 
@@ -53,11 +56,13 @@ class LoadingButton @JvmOverloads constructor(
 
             ButtonState.Completed ->
             {
-
+            buttonText = "COMPLETE"
             }
+
         }
     }
 
+    @InternalCoroutinesApi
     fun setMyButtonState(state : ButtonState)
     {
         buttonState = state
@@ -65,6 +70,7 @@ class LoadingButton @JvmOverloads constructor(
 
     init {
         isClickable = true
+        buttonText = "DOWNLOAD"
     }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -79,13 +85,15 @@ class LoadingButton @JvmOverloads constructor(
         loadingTextWidth = width
         loadingTextHeight = height
     }
+
+    @InternalCoroutinesApi
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
         //float left, float top, float right, float bottom, Paint paint)
         canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), (brbuffer - tlbuffer).toFloat()
             , paint)
         paint.color = Color.BLACK
-        canvas?.drawText("Button",(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
+        canvas?.drawText(buttonText,(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
 
         //Q: Can you dynamically fill a circle drawn from Canvas?
         canvas?.drawCircle(loadingTextWidth-circleRadius,loadingTextHeight-circleRadius,circleRadius,paint)
@@ -97,8 +105,6 @@ class LoadingButton @JvmOverloads constructor(
             //will overlay
             canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), progress, loadingTextHeight.toFloat(), paint)
         }
-
-
     }
     //Measure the view and its content to determine the measured width and the measured height.
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -114,14 +120,33 @@ class LoadingButton @JvmOverloads constructor(
         setMeasuredDimension(w, h)
     }
 //The call to super.performClick() must happen first, which enables accessibility events as well as calls onClickListener().
+@InternalCoroutinesApi
     override fun performClick(): Boolean {
         if (super.performClick()) return true
+    when (buttonState) {
+        buttonState -> ButtonState.Clicked
+        buttonState -> ButtonState.Loading
+        else -> ButtonState.Completed
+    }
+    invalidate()
 
     Toast.makeText(this.context, "Clicked Button", Toast.LENGTH_SHORT).show()
 
     return true
     }
 
+   /* override fun performClick(): Boolean {
+        if (super.performClick()) return true
+        when (buttonState) {
+            buttonState -> ButtonState.Clicked
+            buttonState -> ButtonState.Loading
+            else -> ButtonState.Completed
+        }
+        invalidate()
+        return true
+    }*/
+
+     @InternalCoroutinesApi
      fun btnAnimator() {
         var objectAnimator = ObjectAnimator()
         objectAnimator.setObjectValues(0F,2500F).apply {
@@ -131,22 +156,24 @@ class LoadingButton @JvmOverloads constructor(
             ValueAnimator.AnimatorUpdateListener{
                 valueAnimator ->
                 progress = valueAnimator.animatedValue as Float
+                this@LoadingButton.invalidate()
             }
         }
+         //TODO: Do I need to implement a worker class to use "start()". The worker class being similar to that in the DevBytes
+         // lesson
         start()
-//copied
-       /* btnValueAnimator = ValueAnimator.ofFloat(0F, 2500F).apply {
-            duration = 2000
-            repeatCount = ValueAnimator.INFINITE
-            repeatMode = ValueAnimator.RESTART
-            ValueAnimator.AnimatorUpdateListener { valueAnimator ->
-                progress = valueAnimator.animatedValue as Float
-                // valueAnimator.interpolator = LinearInterpolator()         // default, so not really needed
-                custom_button.invalidate()
-            }
-            // disable during animation
-           // btnValueAnimator.disableDuringAnimation(custom_button)
-            start()
-        }*/
+
+         //Copied from: https://knowledge.udacity.com/questions/579676
+         /*val buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
+             .apply {
+                 duration = 2000
+                 repeatMode = ValueAnimator.RESTART
+                 repeatCount = ValueAnimator.INFINITE
+                 addUpdateListener {
+                     progress = animatedValue as Float
+                     this@LoadingButton.invalidate()
+                 }
+                 start()
+             }*/
     }
 }
