@@ -92,7 +92,7 @@ class LoadingButton @JvmOverloads constructor(
     {
         super.onDraw(canvas)
         //float left, float top, float right, float bottom, Paint paint)
-        canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), (brbuffer - tlbuffer).toFloat()
+        canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), loadingTextHeight.toFloat()
             , paint)
         paint.color = Color.BLACK
         canvas?.drawText(buttonText,(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
@@ -159,7 +159,7 @@ class LoadingButton @JvmOverloads constructor(
 
          //Copied from: https://knowledge.udacity.com/questions/579676
 
-          buttonAnimator = ValueAnimator.ofFloat(0f, progress)//measuredWidth.toFloat())
+          buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
              .apply {
                  duration = 5000
                  repeatMode = ValueAnimator.RESTART
