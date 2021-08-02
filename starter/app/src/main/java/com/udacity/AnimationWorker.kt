@@ -7,7 +7,7 @@ import android.os.Looper
 import android.os.Message
 import androidx.annotation.WorkerThread
 /*
-//TODO: Create Worker, what class do I extend to be able
+Q: Don't think I need this since Main thread comes with it's own Looper
 class AnimationWorker() : Thread("Custom Thread") {
     lateinit var mHandler: Handler
     override fun run() {

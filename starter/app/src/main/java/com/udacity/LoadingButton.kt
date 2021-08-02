@@ -21,7 +21,7 @@ import kotlin.time.Duration
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private var btnValueAnimator = ValueAnimator()
+    private var buttonAnimator = ValueAnimator()
     var progress = 0F
     private var buttonText = ""
 
@@ -57,6 +57,7 @@ class LoadingButton @JvmOverloads constructor(
             ButtonState.Completed ->
             {
             buttonText = "COMPLETE"
+                buttonAnimator.end()
             }
 
         }
@@ -87,7 +88,8 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     @InternalCoroutinesApi
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas?)
+    {
         super.onDraw(canvas)
         //float left, float top, float right, float bottom, Paint paint)
         canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), (brbuffer - tlbuffer).toFloat()
@@ -97,7 +99,7 @@ class LoadingButton @JvmOverloads constructor(
 
         //Q: Can you dynamically fill a circle drawn from Canvas?
         canvas?.drawCircle(loadingTextWidth-circleRadius,loadingTextHeight-circleRadius,circleRadius,paint)
-        //TODO: Clip canvas before adding customView
+        //Q: Clip canvas before adding customView
 
         if (buttonState == ButtonState.Loading)
         {
@@ -135,19 +137,11 @@ class LoadingButton @JvmOverloads constructor(
     return true
     }
 
-   /* override fun performClick(): Boolean {
-        if (super.performClick()) return true
-        when (buttonState) {
-            buttonState -> ButtonState.Clicked
-            buttonState -> ButtonState.Loading
-            else -> ButtonState.Completed
-        }
-        invalidate()
-        return true
-    }*/
-
      @InternalCoroutinesApi
      fun btnAnimator() {
+         //TODO: Why does the animation only work when using ValueAnimator?
+         /*
+     }
         var objectAnimator = ObjectAnimator()
         objectAnimator.setObjectValues(0F,2500F).apply {
             objectAnimator.setDuration(2000)
@@ -159,14 +153,15 @@ class LoadingButton @JvmOverloads constructor(
                 this@LoadingButton.invalidate()
             }
         }
-         //TODO: Do I need to implement a worker class to use "start()". The worker class being similar to that in the DevBytes
-         // lesson
-        start()
+         //Q: Self Note: Do I need to implement a worker class to use "start()". The worker class being similar to that in the DevBytes
+         // lesson?
+        start()*/
 
          //Copied from: https://knowledge.udacity.com/questions/579676
-         /*val buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
+
+          buttonAnimator = ValueAnimator.ofFloat(0f, progress)//measuredWidth.toFloat())
              .apply {
-                 duration = 2000
+                 duration = 5000
                  repeatMode = ValueAnimator.RESTART
                  repeatCount = ValueAnimator.INFINITE
                  addUpdateListener {
@@ -174,6 +169,6 @@ class LoadingButton @JvmOverloads constructor(
                      this@LoadingButton.invalidate()
                  }
                  start()
-             }*/
+             }
     }
 }
