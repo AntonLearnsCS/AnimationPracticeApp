@@ -3,181 +3,164 @@ package com.udacity
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
 import android.content.Context
-import android.graphics.*
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.Typeface
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
-import android.view.animation.Animation
-import android.widget.Toast
-import kotlinx.android.synthetic.main.content_main.view.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.NonCancellable.start
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.coroutineContext
+import android.view.animation.AccelerateInterpolator
+import androidx.core.content.res.ResourcesCompat.getColor
 import kotlin.properties.Delegates
-import kotlin.time.Duration
 
-@InternalCoroutinesApi
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
-    private var buttonAnimator = ValueAnimator()
-    var progress = 0F
+
+
+    //new code
+    private var progress = 0f
+    private var loadingAngle = 0f
     private var buttonText = ""
 
-    private var loadingTextWidth = 0
-    private var loadingTextHeight = 0
+    private var buttonBackgroundColor = 0
 
-    private var circleX = 6F
-    private var circleY = 6F
-    private var circleRadius = 40F
+    private var buttonTextColor = 0
+    private var circleColor = 0
 
-    private val tlbuffer = R.dimen.button_margin
-    private val brbuffer = R.dimen.button_bottom_right_margin
-
+    private var buttonAnimator = ObjectAnimator()
     private var circleAnimator = ObjectAnimator()
-    // KProperty<*>, ButtonState, ButtonState  "kproperty" - Represents a property, such as a named val or var declaration.
-    // Instances of this class are obtainable by the :: operator.
-    //.observable means that the ButtonState instances are able to be observed
-    //it seems that every Delegate will have the "p", "old" and "new" variables to be manipulated
-    @InternalCoroutinesApi
-    private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
-        //we call "new" b/c it is the most recent value passed in
-        when(new)
-        {
-            ButtonState.Loading ->
-            {
-                // will animate draw the rectangle's width based on "progress"
-                buttonText = "LOADING..."
-                buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
-                    .apply {
-                        duration = 2000
-                        repeatMode = ValueAnimator.RESTART
-                        repeatCount = ValueAnimator.INFINITE
+
+
+    private val paintButton = Paint()
+
+    private val paintCircle = Paint()
+
+    //text in the button
+    private val paintText = Paint().apply {
+        textSize = 45f
+        textAlign = Paint.Align.CENTER
+        typeface = Typeface.create("", Typeface.BOLD)
+    }
+
+
+    var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
+        when (new) {
+
+            ButtonState.Loading -> {
+                buttonText = " LOADING..."
+                // button animation set up //.ofFloat(0f, measuredWidth.toFloat())
+                //buttonAnimator = ObjectAnimator()
+                    buttonAnimator.apply {
+                        setObjectValues(0F,2500F)
+                        setDuration(2000)
+                        repeatMode = ObjectAnimator.RESTART
+                        repeatCount = ObjectAnimator.INFINITE
                         addUpdateListener {
                             progress = animatedValue as Float
                             this@LoadingButton.invalidate()
                         }
                         start()
                     }
+                // circle animation set up
+                circleAnimator.apply {
+                    setObjectValues(0F,2500F)
+                    duration = 2000
+                    repeatMode = ValueAnimator.RESTART
+                    repeatCount = ValueAnimator.INFINITE
 
+                    interpolator = AccelerateInterpolator(1f)
+                    addUpdateListener {
+                        loadingAngle = animatedValue as Float
+                        this@LoadingButton.invalidate()
+                    }
+                    start()
+                }
             }
 
-            ButtonState.Completed ->
-            {
-            buttonText = "COMPLETE"
+
+            ButtonState.Completed -> {
+                buttonText = "FINISHED"
+                progress = 0f
+                loadingAngle = 0f
                 buttonAnimator.end()
+                circleAnimator.end()
             }
-            ButtonState.Clicked ->
-            {
+            else -> {
+                ButtonState.Clicked
                 buttonText = "DOWNLOAD"
+                progress = 1f
+                loadingAngle = 1f
             }
-
         }
     }
 
-    @InternalCoroutinesApi
-    fun setMyButtonState(state : ButtonState)
-    {
-        buttonState = state
+    override fun performClick(): Boolean {
+        if (super.performClick()) return true
+        when (buttonState) {
+            buttonState -> ButtonState.Clicked
+            buttonState -> ButtonState.Loading
+            else -> ButtonState.Completed
+        }
+        invalidate()
+        return true
     }
 
     init {
-        isClickable = true
+        //isClickable = true
         buttonText = "DOWNLOAD"
-        setMyButtonState(ButtonState.Clicked)
-    }
+        buttonState = ButtonState.Clicked
 
-    private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-        style = Paint.Style.FILL
-        textAlign = Paint.Align.CENTER
-        textSize = 55.0f
-        typeface = Typeface.create( "", Typeface.BOLD)
-        color = Color.WHITE
-    }
+        //Use  https://developer.android.com/reference/kotlin/android/util/AttributeSet
 
-    override fun onSizeChanged(width: Int, height: Int, oldWidth: Int, oldHeight: Int) {
-        loadingTextWidth = width
-        loadingTextHeight = height
-    }
-
-    @InternalCoroutinesApi
-    override fun onDraw(canvas: Canvas?)
-    {
-        super.onDraw(canvas)
-        //float left, float top, float right, float bottom, Paint paint)
-        canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat()
-            , paint)
-        paint.color = Color.BLACK
-        canvas?.drawText(buttonText,(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
-
-        //Q: Can you dynamically fill a circle drawn from Canvas?
-        canvas?.drawCircle(loadingTextWidth-circleRadius,loadingTextHeight-circleRadius,circleRadius,paint)
-        //Q: Clip canvas before adding customView
-
-        if (buttonState == ButtonState.Loading)
-        {
-            paint.color = Color.CYAN
-            //will overlay
-            canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), progress, measuredHeight.toFloat(), paint)
+        context.theme.obtainStyledAttributes(attrs, R.styleable.customButton, 0, 0).apply {
+            buttonTextColor = getColor(R.styleable.customButton_customButtonBackgroundColor, 0)
+            buttonBackgroundColor = getColor(R.styleable.customButton_primaryBackgroundColor, 0)
+            circleColor = getColor(R.styleable.customButton_circleColor,0)
         }
+        paintButton.color = buttonBackgroundColor
+        paintText.color = buttonTextColor
+        paintCircle.color = circleColor
     }
-    //Measure the view and its content to determine the measured width and the measured height.
+
+    override fun onDraw(canvas: Canvas?) {
+        paintButton.color = buttonBackgroundColor
+
+        super.onDraw(canvas)
+        canvas!!.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), paintButton)
+        //canvas.drawText(buttonText,(measuredWidth/2).toFloat(),(measuredHeight/2).toFloat(),paintText)
+        //button loadingColor
+        paintButton.color = context.getColor(R.color.colorPrimaryDark)
+        canvas.drawRect(0f, 0f, progress, measuredHeight.toFloat(), paintButton)
+
+        canvas.drawText(
+            buttonText,
+            measuredWidth.toFloat() / 2,
+            measuredHeight / 1.7f,
+            paintText
+        )
+        canvas.drawArc(
+            measuredWidth - 100f,
+            (measuredHeight / 2) - 30f,
+            measuredWidth - 50f,
+            (measuredHeight / 2) + 30f,
+            0f, loadingAngle, true, paintCircle
+        )
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-        val minw: Int = paddingLeft + paddingRight + suggestedMinimumWidth
-        val w: Int = resolveSizeAndState(minw, widthMeasureSpec, 1)
+        val minW: Int = paddingLeft + paddingRight + suggestedMinimumWidth
+        val w: Int = resolveSizeAndState(minW, widthMeasureSpec, 1)
         val h: Int = resolveSizeAndState(
             MeasureSpec.getSize(w),
             heightMeasureSpec,
             0
         )
-        loadingTextWidth = w
-        loadingTextHeight = h
+        w
+        h
         setMeasuredDimension(w, h)
     }
-//The call to super.performClick() must happen first, which enables accessibility events as well as calls onClickListener().
-@InternalCoroutinesApi
-    override fun performClick(): Boolean {
-        if (super.performClick()) return true
-    when (buttonState) {
-        buttonState -> ButtonState.Clicked
-        buttonState -> ButtonState.Loading
-        else -> ButtonState.Completed
-    }
-    invalidate()
 
-    Toast.makeText(this.context, buttonState.toString(), Toast.LENGTH_SHORT).show()
-
-    return true
-    }
-
-     @InternalCoroutinesApi
-     fun btnAnimator() {
-
-    /*    var objectAnimator = ObjectAnimator()
-        objectAnimator.setObjectValues(0F,progress).apply {
-            objectAnimator.setDuration(2000)
-            objectAnimator.repeatCount = Animation.INFINITE
-            objectAnimator.repeatMode = ObjectAnimator.RESTART
-            objectAnimator.addUpdateListener{
-                valueAnimator ->
-                progress = valueAnimator.getAnimatedValue() as Float
-                this@LoadingButton.invalidate()
-            }
-        }
-         start()*/
-         //Q: Self Note: Do I need to implement a worker class to use "start()". The worker class being similar to that in the DevBytes
-         // lesson?
-
-         //Copied from: https://knowledge.udacity.com/questions/579676
-
-
-    }
-    @InternalCoroutinesApi
-    fun getState(): String
-    {
-        return buttonState.toString()
+    fun setState(state: ButtonState) {
+        buttonState = state
     }
 }

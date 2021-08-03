@@ -66,6 +66,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        custom_button.setState(ButtonState.Clicked)
+
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         custom_button.setOnClickListener {
 
@@ -75,13 +77,12 @@ class MainActivity : AppCompatActivity() {
                     //Log.i("mainStateBefore", custom_button.getState())
                     //set state
                     //custom_button.setMyButtonState(ButtonState.Clicked)
-                    custom_button.setMyButtonState(ButtonState.Loading)
+                    custom_button.setState(ButtonState.Loading)
                     //Log.i("mainStateAfter",custom_button.getState())
                 }
                 else
                 {
                     Toast.makeText(applicationContext, "Select downloadable item", Toast.LENGTH_SHORT).show()
-
                 }
         }
          notificationManager = this.getSystemService(
@@ -136,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                     context
                 )
             }
-            custom_button.setMyButtonState(ButtonState.Completed)
+            custom_button.setState(ButtonState.Completed)
         }
     }
     //when to call this function, in a broadcast class?
