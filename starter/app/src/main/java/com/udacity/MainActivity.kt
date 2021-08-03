@@ -15,6 +15,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ProgressBar
@@ -71,10 +72,11 @@ class MainActivity : AppCompatActivity() {
                 if (viewModel.currentUrl.value != null)
                 {
                     download()
-                    Toast.makeText(applicationContext, "Select downloadable item", Toast.LENGTH_SHORT).show()
+                    //Log.i("mainStateBefore", custom_button.getState())
                     //set state
-                    custom_button.setMyButtonState(ButtonState.Clicked)
+                    //custom_button.setMyButtonState(ButtonState.Clicked)
                     custom_button.setMyButtonState(ButtonState.Loading)
+                    //Log.i("mainStateAfter",custom_button.getState())
                 }
                 else
                 {

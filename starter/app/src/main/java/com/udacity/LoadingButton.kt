@@ -5,6 +5,7 @@ import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.View
 import android.view.animation.Animation
 import android.widget.Toast
@@ -18,6 +19,7 @@ import kotlin.coroutines.coroutineContext
 import kotlin.properties.Delegates
 import kotlin.time.Duration
 
+@InternalCoroutinesApi
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
@@ -49,8 +51,17 @@ class LoadingButton @JvmOverloads constructor(
             {
                 // will animate draw the rectangle's width based on "progress"
                 buttonText = "LOADING..."
-            btnAnimator()
-
+                buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
+                    .apply {
+                        duration = 2000
+                        repeatMode = ValueAnimator.RESTART
+                        repeatCount = ValueAnimator.INFINITE
+                        addUpdateListener {
+                            progress = animatedValue as Float
+                            this@LoadingButton.invalidate()
+                        }
+                        start()
+                    }
 
             }
 
@@ -58,6 +69,10 @@ class LoadingButton @JvmOverloads constructor(
             {
             buttonText = "COMPLETE"
                 buttonAnimator.end()
+            }
+            ButtonState.Clicked ->
+            {
+                buttonText = "DOWNLOAD"
             }
 
         }
@@ -72,6 +87,7 @@ class LoadingButton @JvmOverloads constructor(
     init {
         isClickable = true
         buttonText = "DOWNLOAD"
+        setMyButtonState(ButtonState.Clicked)
     }
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -92,7 +108,7 @@ class LoadingButton @JvmOverloads constructor(
     {
         super.onDraw(canvas)
         //float left, float top, float right, float bottom, Paint paint)
-        canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), (brbuffer - tlbuffer).toFloat(), loadingTextHeight.toFloat()
+        canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), measuredWidth.toFloat(), measuredHeight.toFloat()
             , paint)
         paint.color = Color.BLACK
         canvas?.drawText(buttonText,(loadingTextWidth/2).toFloat(),(loadingTextHeight/2).toFloat(), paint)
@@ -105,7 +121,7 @@ class LoadingButton @JvmOverloads constructor(
         {
             paint.color = Color.CYAN
             //will overlay
-            canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), progress, loadingTextHeight.toFloat(), paint)
+            canvas?.drawRect(tlbuffer.toFloat(), tlbuffer.toFloat(), progress, measuredHeight.toFloat(), paint)
         }
     }
     //Measure the view and its content to determine the measured width and the measured height.
@@ -132,43 +148,36 @@ class LoadingButton @JvmOverloads constructor(
     }
     invalidate()
 
-    Toast.makeText(this.context, "Clicked Button", Toast.LENGTH_SHORT).show()
+    Toast.makeText(this.context, buttonState.toString(), Toast.LENGTH_SHORT).show()
 
     return true
     }
 
      @InternalCoroutinesApi
      fun btnAnimator() {
-         //TODO: Why does the animation only work when using ValueAnimator?
-         /*
-     }
-        var objectAnimator = ObjectAnimator()
-        objectAnimator.setObjectValues(0F,2500F).apply {
+
+    /*    var objectAnimator = ObjectAnimator()
+        objectAnimator.setObjectValues(0F,progress).apply {
             objectAnimator.setDuration(2000)
             objectAnimator.repeatCount = Animation.INFINITE
-            objectAnimator.repeatMode = ValueAnimator.RESTART
-            ValueAnimator.AnimatorUpdateListener{
+            objectAnimator.repeatMode = ObjectAnimator.RESTART
+            objectAnimator.addUpdateListener{
                 valueAnimator ->
-                progress = valueAnimator.animatedValue as Float
+                progress = valueAnimator.getAnimatedValue() as Float
                 this@LoadingButton.invalidate()
             }
         }
+         start()*/
          //Q: Self Note: Do I need to implement a worker class to use "start()". The worker class being similar to that in the DevBytes
          // lesson?
-        start()*/
 
          //Copied from: https://knowledge.udacity.com/questions/579676
 
-          buttonAnimator = ValueAnimator.ofFloat(0f, measuredWidth.toFloat())
-             .apply {
-                 duration = 5000
-                 repeatMode = ValueAnimator.RESTART
-                 repeatCount = ValueAnimator.INFINITE
-                 addUpdateListener {
-                     progress = animatedValue as Float
-                     this@LoadingButton.invalidate()
-                 }
-                 start()
-             }
+
+    }
+    @InternalCoroutinesApi
+    fun getState(): String
+    {
+        return buttonState.toString()
     }
 }
