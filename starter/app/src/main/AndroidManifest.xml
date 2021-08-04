@@ -23,19 +23,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver
+       <!-- <receiver
             android:name="com.udacity.BroadcastNotificationReceiverClass"
             android:exported="true"
             android:enabled="true"
             >
-            <!-- TODO: DOWNLOAD_COMPLETE not showing up as option for .action-->
             <intent-filter>
                 <action android:name="android.intent.action."/>
 
             </intent-filter>
 
 
-        </receiver>
+        </receiver>-->
     </application>
 
 </manifest>

@@ -2,7 +2,7 @@
 <resources>
     <declare-styleable name="customButton">
         <attr name="textColor" format="color" />
-        <attr name="primaryBackgroundColor" format="color" />
+        <attr name="buttonColor" format="color" />
         <attr name="customButtonBackgroundColor" format="color" />
         <attr name="circleColor" format="color" />
     </declare-styleable>

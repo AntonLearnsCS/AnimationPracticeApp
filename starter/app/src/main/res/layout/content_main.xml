@@ -60,14 +60,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/glide" />
     </RadioGroup>
+
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:clickable="true"
-        app:primaryBackgroundColor="@color/colorPrimary"
-        app:loadingBarColor="@color/colorPrimaryDark"
         app:textColor="@color/white"
+        app:circleColor="@color/white"
+        app:buttonColor="@color/lightBlue"
+        app:customButtonBackgroundColor="@color/black"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
