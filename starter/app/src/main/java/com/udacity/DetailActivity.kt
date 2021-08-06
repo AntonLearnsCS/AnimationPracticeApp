@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.google.android.material.appbar.AppBarLayout
 import kotlinx.android.synthetic.main.activity_detail.*
+import kotlinx.android.synthetic.main.content_detail.*
 
 class DetailActivity : AppCompatActivity() {
 
@@ -14,13 +15,19 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
 
+        val fileName = intent.getStringExtra("fileName")
+        val fileStatus = intent.getStringExtra("fileStatus")
+
+        Log.i("detailName",fileName.toString())
+        Log.i("detailStatus",fileStatus.toString())
+
+        /*textView.setText(fileName.toString())
+        textView2.setText(fileStatus.toString())*/
       //Allows the ActionBar to condense when we scroll
     coordinateMotion()
 
-        val test = intent.getStringExtra("status")
-        if (test != null) {
-            Log.i("Detail",test)
-        }
+
+
     }
 
     private fun coordinateMotion() {

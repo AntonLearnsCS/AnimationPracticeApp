@@ -11,31 +11,33 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
+        android:layout_height="370dp"
         android:backgroundTint="@color/white"
-        android:layout_height="200dp"
         android:theme="@style/AppTheme.AppBarOverlay">
-
-
-<!--TODO: MotionLayout not fading in texts and image-->
-<androidx.constraintlayout.motion.widget.MotionLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layoutDescription="@xml/activity_detail_scene">
 
         <ImageView
             android:id="@+id/detailImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            app:layout_anchor="@+id/appBarLayout"
+            app:layout_anchorGravity="bottom|center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.87"
+            app:layout_constraintVertical_bias="0.0"
             app:srcCompat="@drawable/ic_assistant_black_24dp" />
 
-</androidx.constraintlayout.motion.widget.MotionLayout>
+        <!--TODO: MotionLayout not fading in texts and image-->
+        <!--        <androidx.constraintlayout.motion.widget.MotionLayout
+            android:layout_width="431dp"
+            android:layout_height="328dp"
+            app:layoutDescription="@xml/activity_detail_scene">
+
+        </androidx.constraintlayout.motion.widget.MotionLayout>-->
+
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
@@ -49,16 +51,18 @@
     </com.google.android.material.appbar.AppBarLayout>
 
 
-    <include layout="@layout/content_detail" />
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:text="@string/long_text" />-->
+        <include
+            layout="@layout/content_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -68,5 +72,6 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@android:drawable/ic_dialog_email" />
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

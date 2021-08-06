@@ -113,18 +113,18 @@ class MainActivity : AppCompatActivity() {
                 R.id.appLoad ->
                     if (checked) {
                         viewModel.setUrl(AppUrl)
-                        fileName = R.string.App.toString() //alternatively: fileName = getString(R.string.App)
+                        fileName = getString(R.string.App)
                     }
                 R.id.glide ->
                     if (checked) {
                         viewModel.setUrl(GlideUrl)
-                        fileName = R.string.Glide.toString()
+                        fileName = getString(R.string.Glide)
                     }
                 R.id.retrofit ->
                     if (checked)
                     {
                         viewModel.setUrl(RetrofitUrl)
-                        fileName = R.string.Retrofit.toString()
+                        fileName = getString(R.string.Retrofit)
                     }
             }
         }
@@ -167,7 +167,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             if (context != null) {
-                fileName
                 notificationManager.sendNotification(
                     context.getText(R.string.app_description).toString(),
                     context,fileName,status
@@ -231,6 +230,8 @@ class MainActivity : AppCompatActivity() {
 
         //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
         val detailIntent = Intent(applicationContext, DetailActivity::class.java)
+        detailIntent.putExtra("fileName",fileName)
+        detailIntent.putExtra("fileStatus",fileStatus)
 
         pendingIntent = PendingIntent.getActivity(
             applicationContext,
@@ -252,12 +253,6 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         notify(NOTIFICATION_ID, builder)
-    }
-    fun horizontalLoadingScreen ()
-    {
-       // val animator = ObjectAnimator.ofArgb(custom_button,"backgroundColor", Color.)
-
-
     }
 
     fun NotificationManager.cancelNotifications() {
