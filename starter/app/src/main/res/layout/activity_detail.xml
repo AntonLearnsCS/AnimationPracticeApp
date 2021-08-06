@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,67 +11,40 @@
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
         android:layout_width="match_parent"
-        android:layout_height="438dp"
+        android:backgroundTint="@color/white"
+        android:layout_height="200dp"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+
 <!--TODO: MotionLayout not fading in texts and image-->
-    <androidx.constraintlayout.motion.widget.MotionLayout
-        android:id="@+id/motionLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:minHeight="80dp"
-        app:layoutDescription="@xml/activity_detail_scene"
-        app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="-16dp">
+<androidx.constraintlayout.motion.widget.MotionLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/activity_detail_scene">
 
         <ImageView
             android:id="@+id/detailImage"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="center"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.87"
+            app:srcCompat="@drawable/ic_assistant_black_24dp" />
+
+</androidx.constraintlayout.motion.widget.MotionLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_assistant_black_24dp" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="250dp"
-            android:layout_height="149dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="96dp"
-            android:text="Testing MotionLayout"
-            android:textSize="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="251dp"
-            android:layout_height="179dp"
-            android:layout_marginStart="104dp"
-            android:layout_marginTop="8dp"
-            android:text="TextView2"
-            android:textSize="30dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-    </androidx.constraintlayout.motion.widget.MotionLayout>
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:popupTheme="@style/AppTheme.PopupOverlay" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -82,8 +57,8 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
 
-        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:text="@string/long_text" />
+        <!--<TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="@string/long_text" />-->
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

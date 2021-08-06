@@ -1,6 +1,7 @@
 package com.udacity
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.google.android.material.appbar.AppBarLayout
@@ -13,12 +14,15 @@ class DetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
 
-      //for scrolling only
+      //Allows the ActionBar to condense when we scroll
     coordinateMotion()
 
+        val test = intent.getStringExtra("status")
+        if (test != null) {
+            Log.i("Detail",test)
+        }
     }
 
-    //val getIntent = intent.
     private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = findViewById(R.id.appBarLayout)
         val motionLayout: MotionLayout = findViewById(R.id.motionLayout)

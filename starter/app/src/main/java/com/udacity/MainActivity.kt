@@ -9,6 +9,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
@@ -44,6 +45,9 @@ class MainActivity : AppCompatActivity() {
     //for actions like snooze
     private lateinit var action: NotificationCompat.Action
     private lateinit var viewModel : ViewModel
+    private var fileName = ""
+    private var fileStatus : Int? = 0
+    private var status = ""
 
     /*private var i = 0
     private val handler = Handler(Looper.getMainLooper()).postDelayed({
@@ -109,15 +113,18 @@ class MainActivity : AppCompatActivity() {
                 R.id.appLoad ->
                     if (checked) {
                         viewModel.setUrl(AppUrl)
+                        fileName = R.string.App.toString() //alternatively: fileName = getString(R.string.App)
                     }
                 R.id.glide ->
                     if (checked) {
                         viewModel.setUrl(GlideUrl)
+                        fileName = R.string.Glide.toString()
                     }
                 R.id.retrofit ->
                     if (checked)
                     {
                         viewModel.setUrl(RetrofitUrl)
+                        fileName = R.string.Retrofit.toString()
                     }
             }
         }
@@ -131,10 +138,39 @@ class MainActivity : AppCompatActivity() {
             // (as a long) of the download that just completed.
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
 
+            //from: https://stackoverflow.com/questions/58083140/how-to-download-file-using-downloadmanager-in-api-29-or-android-q
+            val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+
+            //finds the file downloaded based on the files "id"; returned object is of type "DownloadManager.Query"
+            val fileDownloaded = id?.let { DownloadManager.Query().setFilterById(it) }
+            //The Cursor interface provides random read-write access to the result set returned by a database query.
+            val cursor : Cursor = downloadManager.query(fileDownloaded)
+
+
+
+            //Move the cursor to the first row. This method will return false if the cursor is empty.
+            if (cursor.moveToFirst()) {
+                //getInt - Returns the value of the requested column as an int.
+                //getColumnIndex - Returns the zero-based index for the given column name, or -1 if the column doesn't exist.
+                    //overall, the line below is saying to get the integer value of the column that contains the download status
+                        //so it looks like each column just has one row since we are always returning the zero-based index
+                fileStatus = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            }
+
+            when (fileStatus) {
+                DownloadManager.STATUS_SUCCESSFUL -> { //"DownloadManager.STATUS_SUCCESSFUL" has a constant value of 8
+                    status = "Success"
+                }
+                DownloadManager.STATUS_FAILED -> {
+                    status = "Fail"
+                }
+            }
+
             if (context != null) {
+                fileName
                 notificationManager.sendNotification(
                     context.getText(R.string.app_description).toString(),
-                    context
+                    context,fileName,status
                 )
             }
             custom_button.setState(ButtonState.Completed)
@@ -191,7 +227,7 @@ class MainActivity : AppCompatActivity() {
 //So since we want to use this extension function outside of our MainActivity class, we define the extension function inside of
 //said class
 
-    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
+    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context, fileName : String, fileStatus : String) {
 
         //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
         val detailIntent = Intent(applicationContext, DetailActivity::class.java)

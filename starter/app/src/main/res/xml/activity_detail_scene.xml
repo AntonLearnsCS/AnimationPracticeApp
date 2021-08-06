@@ -7,14 +7,20 @@
             android:alpha="0.0"
             android:layout_width="354dp"
             android:layout_height="122dp"
-            app:layout_editor_absoluteY="256dp"
-            app:layout_editor_absoluteX="28dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_editor_absoluteX="28dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintEnd_toEndOf="parent" />
         <Constraint android:id="@+id/textView2"
             android:alpha="0.0"
             android:layout_width="232dp"
             android:layout_height="110dp"
-            app:layout_editor_absoluteY="109dp"
-            app:layout_editor_absoluteX="36dp" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="248dp"
+            app:layout_constraintHorizontal_bias="0.497" />
 
         <Constraint android:id="@+id/detailImage"
             android:alpha="0.0"
@@ -35,7 +41,8 @@
     <Transition
         app:constraintSetEnd="@id/end"
         app:constraintSetStart="@+id/start"
-        app:duration="5000">
+        app:duration="5000"
+        >
 
 <!--        <KeyFrameSet>
             <KeyAttribute
