@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
-
     <Transition
         motion:autoTransition="animateToEnd"
         motion:constraintSetEnd="@+id/end"
@@ -25,12 +24,10 @@
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            motion:layout_constraintStart_toStartOf="@+id/fileName"
             motion:layout_constraintBottom_toTopOf="@+id/FAB"
             motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
             android:layout_marginTop="40dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp" />
+            motion:layout_constraintStart_toStartOf="parent" />
         <Constraint
             android:id="@+id/fileNameEntry"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -54,12 +51,11 @@
             motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
             android:layout_width="170dp"
             android:layout_height="110dp"
-            motion:layout_constraintStart_toEndOf="@+id/status"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintVertical_bias="0.377"
-            motion:layout_constraintHorizontal_bias="0.503"
+            motion:layout_constraintVertical_bias="0.225"
             android:alpha="0"
-          />
+            motion:layout_constraintHorizontal_bias="0.368"
+            motion:layout_constraintStart_toEndOf="@+id/status" />
 
         <Constraint
             android:id="@+id/FAB"
@@ -67,10 +63,11 @@
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_editor_absoluteX="330dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/statusEntry"
-            android:alpha="0"/>
+            android:alpha="0"
+            motion:layout_constraintVertical_bias="0.219"
+            motion:layout_constraintHorizontal_bias="0.43" />
 
     </ConstraintSet>
 

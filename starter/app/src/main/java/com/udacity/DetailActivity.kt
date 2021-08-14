@@ -1,5 +1,6 @@
 package com.udacity
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -35,7 +36,10 @@ class DetailActivity : AppCompatActivity() {
         textView2.setText(fileStatus.toString())*/
       //Allows the ActionBar to condense when we scroll
    // coordinateMotion()
-
+        FAB.setOnClickListener {
+            val returnIntent = Intent(this, MainActivity::class.java)
+            startActivity(returnIntent)
+        }
 
 
     }

@@ -45,7 +45,7 @@ class LoadingButton @JvmOverloads constructor(
                 // button animation set up //.ofFloat(0f, measuredWidth.toFloat())
                 //buttonAnimator = ObjectAnimator()
                     buttonAnimator.apply {
-                        setObjectValues(0F,2500F)
+                        setObjectValues(0F,7200F)
                         setDuration(2000)
                         repeatMode = ObjectAnimator.RESTART
                         repeatCount = ObjectAnimator.INFINITE
@@ -57,7 +57,7 @@ class LoadingButton @JvmOverloads constructor(
                     }
                 // circle animation set up
                 circleAnimator.apply {
-                    setObjectValues(0F,2500F)
+                    setObjectValues(0F,7200F)
                     duration = 2000
                     repeatMode = ObjectAnimator.RESTART
                     repeatCount = ObjectAnimator.INFINITE
