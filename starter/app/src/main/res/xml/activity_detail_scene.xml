@@ -4,20 +4,20 @@
 
     <ConstraintSet android:id="@+id/start">
         <Constraint android:id="@+id/textView"
-            android:alpha="1.0"
+            android:alpha="0.0"
             android:layout_width="354dp"
             android:layout_height="122dp"
             app:layout_editor_absoluteY="256dp"
             app:layout_editor_absoluteX="28dp" />
         <Constraint android:id="@+id/textView2"
-            android:alpha="1.0"
+            android:alpha="0.0"
             android:layout_width="232dp"
             android:layout_height="110dp"
             app:layout_editor_absoluteY="109dp"
             app:layout_editor_absoluteX="36dp" />
 
         <Constraint android:id="@+id/detailImage"
-            android:alpha="1.0"
+            android:alpha="0.0"
             android:layout_width="395dp"
             android:layout_height="76dp" />
 
@@ -25,11 +25,11 @@
 
     <ConstraintSet android:id="@+id/end">
         <Constraint android:id="@+id/textView"
-            android:alpha="0.0"/>
+            android:alpha="1.0"/>
         <Constraint android:id="@+id/textView2"
-            android:alpha="0.0"/>
+            android:alpha="1.0"/>
         <Constraint android:id="@+id/detailImage"
-            android:alpha="0.0"/>
+            android:alpha="1.0"/>
     </ConstraintSet>
 
     <Transition
