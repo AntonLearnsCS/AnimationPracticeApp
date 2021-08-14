@@ -69,7 +69,7 @@
         app:textColor="@color/white"
         app:circleColor="@color/white"
         app:buttonColor="@color/lightBlue"
-        app:customButtonBackgroundColor="@color/black"
+        app:customButtonBackgroundColor="#00ff33"
         android:layout_margin="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
