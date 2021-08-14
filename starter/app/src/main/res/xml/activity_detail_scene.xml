@@ -43,10 +43,9 @@
             android:layout_marginTop="0dp"
             android:alpha="0"
             >
-
             <CustomAttribute
                 motion:attributeName="textColor"
-                motion:customColorValue="#000000" />
+                motion:customColorValue="#116644" />
         </Constraint>
 
         <Constraint
@@ -63,10 +62,10 @@
           />
 
         <Constraint
+            android:id="@+id/FAB"
             android:layout_height="wrap_content"
             motion:layout_constraintEnd_toEndOf="parent"
             android:layout_width="wrap_content"
-            android:id="@+id/FAB"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_editor_absoluteX="330dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -87,6 +86,7 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/statusEntry"
             android:alpha="1"/>
+
         <Constraint
             android:id="@+id/fileName"
             android:layout_width="wrap_content"

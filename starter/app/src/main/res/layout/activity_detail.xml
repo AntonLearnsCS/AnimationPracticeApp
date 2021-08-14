@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MotionLayout is a subclass of constraint layout so we can still use constraint layout properties -->
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-    </data>
 
     <androidx.constraintlayout.motion.widget.MotionLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:id="@+id/motionLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -39,7 +35,7 @@
             android:id="@+id/FAB"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_assistant_black_24dp"
+            app:srcCompat="@drawable/checkMark"
             android:visibility="visible"
            />
 
@@ -82,6 +78,7 @@
         <TextView
             android:id="@+id/statusEntry"
             android:layout_width="0dp"
+            android:textSize="20sp"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@+id/motionLayout"
             app:layout_constraintStart_toEndOf="@+id/status"
@@ -89,4 +86,3 @@
            />
 
     </androidx.constraintlayout.motion.widget.MotionLayout>
-</layout>

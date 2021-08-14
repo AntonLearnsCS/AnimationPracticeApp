@@ -5,7 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
 import com.google.android.material.appbar.AppBarLayout
-import com.udacity.databinding.ActivityDetailBinding
+//import com.udacity.databinding.ActivityDetailBinding
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.content_detail.*
 
@@ -19,10 +19,14 @@ class DetailActivity : AppCompatActivity() {
         val fileName = intent.getStringExtra("fileName")
         val fileStatus = intent.getStringExtra("fileStatus")
 
-        val mBinding = ActivityDetailBinding.inflate(layoutInflater)
+        /*val mBinding = ActivityDetailBinding.inflate(layoutInflater)
 
         mBinding.fileNameEntry.setText(fileName.toString())
-        mBinding.statusEntry.setText(fileStatus.toString())
+        mBinding.statusEntry.setText(fileStatus.toString())*/
+
+        //Interestingly, when we use layout tag we cannot use setText or .text to update the text in the textView
+        fileNameEntry.setText(fileName.toString())
+        statusEntry.setText(fileStatus.toString())
 
         Log.i("detailName",fileName.toString())
         Log.i("detailStatus",fileStatus.toString())
