@@ -9,7 +9,8 @@ sealed class ButtonState {
     object Loading : ButtonState()
     object Completed : ButtonState()
 }
+/*
 sealed class testing{
     object test : testing()
     object test1 : testing()
-}
+}*/

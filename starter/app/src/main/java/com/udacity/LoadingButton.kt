@@ -37,9 +37,14 @@ class LoadingButton @JvmOverloads constructor(
     //.observable means that the ButtonState instances are able to be observed
     //it seems that every Delegate will have the "p", "old" and "new" variables to be manipulated
 
+    /*
+    A delegate is just a class that provides the value for a property and handles its changes.
+    This allows us to move, or delegate, the getter-setter logic from the property itself to a separate class,
+    letting us reuse this logic.
+    source: https://proandroiddev.com/kotlin-delegates-in-android-1ab0a715762d
+     */
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when (new) {
-
             ButtonState.Loading -> {
                 buttonText = " LOADING..."
                 // button animation set up //.ofFloat(0f, measuredWidth.toFloat())
@@ -88,11 +93,18 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun performClick(): Boolean {
         if (super.performClick()) return true
+
+        if (buttonState == ButtonState.Completed)
+        {
+            buttonAnimator.isPaused
+            circleAnimator.isPaused
+        }
         when (buttonState) {
             buttonState -> ButtonState.Clicked
             buttonState -> ButtonState.Loading
             else -> ButtonState.Completed
         }
+        //redraw
         invalidate()
         return true
     }
@@ -160,5 +172,9 @@ class LoadingButton @JvmOverloads constructor(
 
     fun setState(state: ButtonState) {
         buttonState = state
+    }
+    fun setProgress(num : Float)
+    {
+        progress = num
     }
 }

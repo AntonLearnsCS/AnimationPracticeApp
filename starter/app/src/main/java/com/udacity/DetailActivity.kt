@@ -29,9 +29,6 @@ class DetailActivity : AppCompatActivity() {
         fileNameEntry.setText(fileName.toString())
         statusEntry.setText(fileStatus.toString())
 
-        Log.i("detailName",fileName.toString())
-        Log.i("detailStatus",fileStatus.toString())
-
         /*textView.setText(fileName.toString())
         textView2.setText(fileStatus.toString())*/
       //Allows the ActionBar to condense when we scroll
@@ -44,7 +41,7 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-    private fun coordinateMotion() {
+/*    private fun coordinateMotion() {
         val appBarLayout: AppBarLayout = findViewById(R.id.appBarLayout)
         val motionLayout: MotionLayout = findViewById(R.id.motionLayout)
 
@@ -53,5 +50,5 @@ class DetailActivity : AppCompatActivity() {
             motionLayout.progress = seekPosition
         }
         appBarLayout.addOnOffsetChangedListener(listener)
-    }
+    }*/
 }

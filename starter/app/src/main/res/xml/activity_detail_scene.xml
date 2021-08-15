@@ -17,17 +17,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="284dp"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintHorizontal_chainStyle="spread_inside" />
+            motion:layout_constraintHorizontal_chainStyle="spread_inside"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp" />
         <Constraint
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="40dp"
             motion:layout_constraintBottom_toTopOf="@+id/FAB"
             motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
-            android:layout_marginTop="40dp"
-            motion:layout_constraintStart_toStartOf="parent" />
+            motion:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="40dp"
+            android:layout_marginStart="40dp" />
         <Constraint
             android:id="@+id/fileNameEntry"
             motion:layout_constraintEnd_toEndOf="parent"

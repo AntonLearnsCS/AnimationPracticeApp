@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelStore
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.delay
 
 private val NOTIFICATION_ID = 0
 
@@ -49,17 +50,6 @@ class MainActivity : AppCompatActivity() {
     private var fileStatus : Int? = 0
     private var status = ""
 
-    /*private var i = 0
-    private val handler = Handler(Looper.getMainLooper()).postDelayed({
-        // Your Code
-        progressBar!!.progress = i
-    }, 3000)
-
-    *//*    val binding: ContentMainBinding = DataBindingUtil.inflate(
-        layoutInflater, R.layout.content_main, C, false)*//*
-
-
-    private var progressBar: ProgressBar? = null*/
 
 
     @InternalCoroutinesApi
@@ -75,14 +65,23 @@ class MainActivity : AppCompatActivity() {
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         custom_button.setOnClickListener {
 
+            if (custom_button.buttonState == ButtonState.Completed)
+            {
+                //add navigation
+                    custom_button.setState(ButtonState.Completed)
+                /*    custom_button.setState(ButtonState.Completed)
+                custom_button.setProgress(100f)*/
+                val returnIntent = Intent(this, DetailActivity::class.java)
+                returnIntent.putExtra("fileName",fileName)
+                returnIntent.putExtra("fileStatus",status)
+
+                startActivity(returnIntent)
+            }
                 if (viewModel.currentUrl.value != null)
                 {
                     download()
-                    //Log.i("mainStateBefore", custom_button.getState())
-                    //set state
-                    //custom_button.setMyButtonState(ButtonState.Clicked)
+
                     custom_button.setState(ButtonState.Loading)
-                    //Log.i("mainStateAfter",custom_button.getState())
                 }
                 else
                 {
@@ -100,6 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this).get(ViewModel::class.java)
     }
+
     private val receiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             //"EXTRA_DOWNLOAD_ID" - Intent extra included with ACTION_DOWNLOAD_COMPLETE intents, indicating the ID
@@ -217,8 +217,6 @@ class MainActivity : AppCompatActivity() {
         private const val GlideUrl = "https://github.com/bumptech/glide/archive/refs/heads/master.zip"
 
         private const val RetrofitUrl = "https://github.com/square/retrofit/archive/refs/heads/master.zip"
-
-        private const val CHANNEL_ID = "channelId"
     }
     //Note: Each scope function adds context to the one that already exists (context of our class or outer function).
 //So since we want to use this extension function outside of our MainActivity class, we define the extension function inside of
@@ -243,7 +241,6 @@ class MainActivity : AppCompatActivity() {
 
         val snoozeIntent = Intent(applicationContext, SnoozeReceiver::class.java)
         val REQUEST_CODE = 1
-        val FLAGS = 1
 
         val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(
             applicationContext,
@@ -269,8 +266,8 @@ class MainActivity : AppCompatActivity() {
 
         notify(NOTIFICATION_ID, builder)
     }
-
-    fun NotificationManager.cancelNotifications() {
+//not needed since setAutoCancel(true)
+  /*  fun NotificationManager.cancelNotifications() {
         cancelAll()
-    }
+    }*/
 }
