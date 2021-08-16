@@ -29,4 +29,11 @@
     <string name="file_name">File name:</string>
     <string name="status">Status:</string>
 
+    <string name="channel_description">Channel Description:</string>
+    <string name="fcm_notification_id">fcm_notification_id</string>
+
+    <string name="fcm_notification_name">fcm_notification_name</string>
+
+
+
 </resources>

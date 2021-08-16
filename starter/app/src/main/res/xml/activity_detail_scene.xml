@@ -23,7 +23,10 @@
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginLeft="132dp"
-            android:layout_marginStart="132dp" />
+            android:layout_marginStart="132dp"
+            android:layout_marginBottom="672dp"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:layout_constraintVertical_bias="0.461" />
         <Constraint
             android:id="@+id/status"
             android:layout_width="wrap_content"
@@ -35,9 +38,10 @@
             android:layout_marginTop="40dp"
             motion:layout_constraintBottom_toTopOf="@+id/FAB"
             motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
-            motion:layout_constraintVertical_bias="0.0"
+            motion:layout_constraintVertical_bias="1.0"
             android:layout_marginLeft="40dp"
-            android:layout_marginStart="40dp" />
+            android:layout_marginStart="40dp"
+            motion:layout_constraintHorizontal_bias="0.297" />
         <Constraint
             android:id="@+id/fileNameEntry"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -62,9 +66,9 @@
             android:layout_width="170dp"
             android:layout_height="110dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintVertical_bias="0.225"
+            motion:layout_constraintVertical_bias="0.152"
             android:alpha="0"
-            motion:layout_constraintHorizontal_bias="0.368"
+            motion:layout_constraintHorizontal_bias="0.0"
             motion:layout_constraintStart_toEndOf="@+id/status" />
 
         <Constraint

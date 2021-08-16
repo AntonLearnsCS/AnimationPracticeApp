@@ -30,27 +30,23 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.delay
 
-private val NOTIFICATION_ID = 0
 
 class MainActivity : AppCompatActivity() {
 
     private var downloadID: Long = 0
 
     private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    //for actions like snooze
-    private lateinit var action: NotificationCompat.Action
+
     private lateinit var viewModel : ViewModel
     private var fileName = ""
     private var fileStatus : Int? = 0
     private var status = ""
-
-
 
     @InternalCoroutinesApi
     @RequiresApi(Build.VERSION_CODES.O)
@@ -97,7 +93,11 @@ class MainActivity : AppCompatActivity() {
         getString(R.string.notification_id),
         getString(R.string.notification_name))
 
+        createChannel(R.string.fcm_notification_id.toString(),R.string.fcm_notification_name.toString())
+
         viewModel = ViewModelProvider(this).get(ViewModel::class.java)
+
+        subscribeTopic()
     }
 
     private val receiver = object : BroadcastReceiver() {
@@ -182,8 +182,11 @@ class MainActivity : AppCompatActivity() {
             val notificationChannel = NotificationChannel(
                 channelId,
                 channelName,
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_HIGH
             )
+                .apply {
+                    setShowBadge(false)
+                }
 
             notificationChannel.enableLights(true)
             notificationChannel.lightColor = Color.RED
@@ -193,7 +196,22 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(notificationChannel)
         }
     }
-//The download manager is a system service that handles long-running HTTP downloads.
+    //publish subscribe model
+    private fun subscribeTopic() {
+        // [START subscribe_topic]
+        FirebaseMessaging.getInstance().subscribeToTopic("LoadingApp")
+            .addOnCompleteListener { task ->
+                var message = "Successfully subsribed"
+                if (!task.isSuccessful) {
+                    message = "Failed to subscribe"
+                }
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
+    }
+        // [END subscribe_topics]
+
+
+        //The download manager is a system service that handles long-running HTTP downloads.
 //Clients may request that a URI be downloaded to a particular destination file.
     private fun download() {
         val request =
@@ -222,52 +240,10 @@ class MainActivity : AppCompatActivity() {
 //So since we want to use this extension function outside of our MainActivity class, we define the extension function inside of
 //said class
 
-    fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context, fileName : String, fileStatus : String) {
 
-        //note that the Intent is created inside the function (as opposed to BroadcastReceiver class)
-        val detailIntent = Intent(applicationContext, DetailActivity::class.java)
-        detailIntent.putExtra("fileName",fileName)
-        detailIntent.putExtra("fileStatus",fileStatus)
-
-        pendingIntent = PendingIntent.getActivity(
-            applicationContext,
-            NOTIFICATION_ID,
-            detailIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-
-        action = NotificationCompat.Action(null,"check",pendingIntent)
-
-
-        val snoozeIntent = Intent(applicationContext, SnoozeReceiver::class.java)
-        val REQUEST_CODE = 1
-
-        val snoozePendingIntent: PendingIntent = PendingIntent.getBroadcast(
-            applicationContext,
-            REQUEST_CODE,
-            snoozeIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        val snoozeAction = NotificationCompat.Action(null,"snooze",snoozePendingIntent)
-
-        val builder = NotificationCompat.Builder(
-            applicationContext,
-            applicationContext.getString(R.string.notification_id)
-        )
-            .setSmallIcon(R.drawable.ic_assistant_black_24dp)
-            .setContentTitle(applicationContext
-                .getString(R.string.notification_title)) //R
-            .setContentIntent(pendingIntent)
-            .addAction(action)
-            .addAction(snoozeAction)
-            .setAutoCancel(true)
-            .setContentText(messageBody)
-            .build()
-
-        notify(NOTIFICATION_ID, builder)
-    }
 //not needed since setAutoCancel(true)
   /*  fun NotificationManager.cancelNotifications() {
         cancelAll()
     }*/
+
 }

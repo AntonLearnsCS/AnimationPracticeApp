@@ -4,5 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
     app:startDestination="@+id/main_layout">
-
+<!--
+Navigating with Activites: "So what you can do is to use an Activity as a destination in your nav_graph1.xml and
+that Activity(the destination) has to have its own nav_graph2.xml. This way you keep using Navigation as a way
+to go through your app."
+source: https://stackoverflow.com/questions/50599873/how-to-start-second-activity-with-navigation-in-jetpack-->
 </navigation>

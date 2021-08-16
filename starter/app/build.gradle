@@ -25,6 +25,16 @@ android {
     buildFeatures {
         dataBinding true
     }
+    /* source: https://stackoverflow.com/questions/16654951/gradle-sourcecompatibility-vs-targetcompatibility
+    sourceCompatibility = specifies that version of the Java programming language be used to compile .java files.
+     e.g sourceCompatibility 1.6 =specifies that version 1.6 of the Java programming language be used to compile .java files.
+    By default sourceCompatibility = "version of the current JVM in use" and targetCompatibility = sourceCompatibility
+    targetCompatibility = The option ensures that the generated class files will be compatible with VMs specified by targetCompatibility . Note that in most cases, the value of the -target option is the value of the -source option; in that case, you can omit the -target option.
+     */
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 
 }
 
@@ -36,6 +46,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-rc1'
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.5'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.5'
+    implementation 'com.google.firebase:firebase-messaging:22.0.0'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
