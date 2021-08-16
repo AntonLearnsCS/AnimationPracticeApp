@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:motion="http://schemas.android.com/apk/res-auto">
 
+<!-- animateToEnd will cause automatic movement
+It helps for the automatic transition from one state to another.
+-->
+<!-- TODO: In the MotionLayout lab, we animated without using  motion:autoTransition="animateToEnd"    ,however without this tag
+ my animation did not start. Why is that?-->
     <Transition
         motion:autoTransition="animateToEnd"
         motion:constraintSetEnd="@+id/end"
