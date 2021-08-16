@@ -50,7 +50,7 @@ class LoadingButton @JvmOverloads constructor(
                 // button animation set up //.ofFloat(0f, measuredWidth.toFloat())
                 //buttonAnimator = ObjectAnimator()
                     buttonAnimator.apply {
-                        setObjectValues(0F,7200F)
+                        setObjectValues(0F,3600F)
                         setDuration(2000)
                         repeatMode = ObjectAnimator.RESTART
                         repeatCount = ObjectAnimator.INFINITE
@@ -62,7 +62,7 @@ class LoadingButton @JvmOverloads constructor(
                     }
                 // circle animation set up
                 circleAnimator.apply {
-                    setObjectValues(0F,7200F)
+                    setObjectValues(0F,3600F)
                     duration = 2000
                     repeatMode = ObjectAnimator.RESTART
                     repeatCount = ObjectAnimator.INFINITE
@@ -105,7 +105,9 @@ class LoadingButton @JvmOverloads constructor(
             else -> ButtonState.Completed
         }
         //redraw
+        if (buttonState != ButtonState.Completed)
         invalidate()
+
         return true
     }
 
@@ -172,9 +174,5 @@ class LoadingButton @JvmOverloads constructor(
 
     fun setState(state: ButtonState) {
         buttonState = state
-    }
-    fun setProgress(num : Float)
-    {
-        progress = num
     }
 }

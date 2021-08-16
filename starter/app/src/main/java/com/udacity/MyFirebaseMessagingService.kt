@@ -11,13 +11,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: ${remoteMessage?.from}")
 
-        // TODO Step 3.5 check messages for data
         // Check if message contains a data payload.
         remoteMessage?.data?.let {
             Log.d(TAG, "Message data payload: " + remoteMessage.data)
     }
 
-        // TODO Step 3.6 check messages for notification and call sendNotification
         // Check if message contains a notification payload.
         //Messages may have a RemoteMessage.Notification instance if they are received while the application is in the foreground,
         // otherwise they will be automatically posted to the notification tray.
@@ -27,8 +25,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         }
     }
 
-    //TODO Step 3.2 log registration token
-    // [START on_new_token]
+
     override fun onNewToken(token: String) {
         Log.d(TAG, "Refreshed token: $token")
 
@@ -45,7 +42,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param token The new token.
      */
     private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
+        //Implement this method to send token to your app server.
     }
 
     /**
@@ -54,6 +51,10 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      * @param messageBody FCM message body received.
      */
     private fun sendNotification(messageBody: String) {
+        Log.i(
+            "Firebase","called"
+        )
+        //Note: ContextCompat class is used when you would like to retrieve resources, such as drawable or color without bother about theme.
         val notificationManager = ContextCompat.getSystemService(applicationContext, NotificationManager::class.java) as NotificationManager
         notificationManager.sendNotification(messageBody, applicationContext,"fileName","fileStatus")
     }

@@ -18,58 +18,51 @@
             android:layout_height="wrap_content"
             motion:layout_constraintTop_toBottomOf="@+id/appBarLayout"
             android:layout_marginTop="284dp"
-            motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintHorizontal_chainStyle="spread_inside"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginLeft="132dp"
-            android:layout_marginStart="132dp"
             android:layout_marginBottom="672dp"
+            motion:layout_constraintVertical_bias="0.866"
             motion:layout_constraintHorizontal_bias="0.0"
-            motion:layout_constraintVertical_bias="0.461" />
+            motion:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="132dp"
+            android:layout_marginStart="132dp" />
         <Constraint
             android:id="@+id/status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             motion:layout_constraintStart_toStartOf="parent"
-            motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="40dp"
-            motion:layout_constraintBottom_toTopOf="@+id/FAB"
-            motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
-            motion:layout_constraintVertical_bias="1.0"
+            motion:layout_constraintTop_toBottomOf="@+id/fileName"
             android:layout_marginLeft="40dp"
             android:layout_marginStart="40dp"
-            motion:layout_constraintHorizontal_bias="0.297" />
+            motion:layout_constraintHorizontal_bias="0.287"
+            motion:layout_constraintBottom_toTopOf="@+id/FAB"
+            motion:layout_constraintBottom_toBottomOf="parent"
+            motion:layout_constraintVertical_bias="0.0" />
         <Constraint
             android:id="@+id/fileNameEntry"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintStart_toEndOf="@+id/fileName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="0dp"
             motion:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
             android:alpha="0"
             >
-            <CustomAttribute
-                motion:attributeName="textColor"
-                motion:customColorValue="#116644" />
+
         </Constraint>
 
         <Constraint
             android:id="@+id/statusEntry"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
-            android:layout_width="170dp"
-            android:layout_height="110dp"
+            android:layout_width="169dp"
+            android:layout_height="28dp"
             motion:layout_constraintBottom_toBottomOf="parent"
-            motion:layout_constraintVertical_bias="0.152"
+            motion:layout_constraintVertical_bias="0.225"
             android:alpha="0"
-            motion:layout_constraintHorizontal_bias="0.0"
-            motion:layout_constraintStart_toEndOf="@+id/status" />
+            motion:layout_constraintStart_toEndOf="@+id/status"
+            motion:layout_constraintHorizontal_bias="0.368" />
 
         <Constraint
             android:id="@+id/FAB"
@@ -82,7 +75,23 @@
             android:alpha="0"
             motion:layout_constraintVertical_bias="0.219"
             motion:layout_constraintHorizontal_bias="0.43" />
-
+        <Constraint
+            android:layout_height="wrap_content"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintHorizontal_bias="0.0"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="match_parent"
+            android:id="@+id/appBarLayout" />
+        <Constraint
+            android:id="@+id/textView"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintBottom_toBottomOf="parent" />
+        <Constraint
+            motion:layout_editor_absoluteY="166dp"
+            motion:layout_editor_absoluteX="105dp"
+            android:id="@+id/button" />
     </ConstraintSet>
 
     <ConstraintSet android:id="@+id/end">
@@ -129,7 +138,7 @@
             android:alpha="1">
             <CustomAttribute
                 motion:attributeName="textColor"
-                motion:customColorValue="#CF0A4D" />
+                motion:customColorValue="#f66245" />
         </Constraint>
 
         <Constraint
@@ -144,4 +153,5 @@
             motion:layout_constraintHorizontal_bias="0.503"
             android:alpha="1"/>
     </ConstraintSet>
+
 </MotionScene>

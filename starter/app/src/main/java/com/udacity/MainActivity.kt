@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
     private var downloadID: Long = 0
 
     private lateinit var notificationManager: NotificationManager
-
+    private val NOTIFICATION_ID = 0
     private lateinit var viewModel : ViewModel
     private var fileName = ""
     private var fileStatus : Int? = 0
@@ -59,10 +59,14 @@ class MainActivity : AppCompatActivity() {
         custom_button.setState(ButtonState.Clicked)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        notificationManager = this.getSystemService(
+            NotificationManager::class.java
+        ) as NotificationManager
         custom_button.setOnClickListener {
 
             if (custom_button.buttonState == ButtonState.Completed)
             {
+                notificationManager.cancel(NOTIFICATION_ID)
                 //add navigation
                     custom_button.setState(ButtonState.Completed)
                 /*    custom_button.setState(ButtonState.Completed)
@@ -73,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
                 startActivity(returnIntent)
             }
-                if (viewModel.currentUrl.value != null)
+                else if (viewModel.currentUrl.value != null)
                 {
                     download()
 
@@ -84,9 +88,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, "Select downloadable item", Toast.LENGTH_SHORT).show()
                 }
         }
-         notificationManager = this.getSystemService(
-            NotificationManager::class.java
-        ) as NotificationManager
+
 
     createChannel(
         //since the channel and send notification uses the same channel_id, the notification will be passed through said channel

@@ -1,14 +1,14 @@
 package com.udacity
 
+//import com.udacity.databinding.ActivityDetailBinding
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.motion.widget.MotionLayout
-import com.google.android.material.appbar.AppBarLayout
-//import com.udacity.databinding.ActivityDetailBinding
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.content_detail.*
+
 
 class DetailActivity : AppCompatActivity() {
 
@@ -29,10 +29,9 @@ class DetailActivity : AppCompatActivity() {
         fileNameEntry.setText(fileName.toString())
         statusEntry.setText(fileStatus.toString())
 
-        /*textView.setText(fileName.toString())
-        textView2.setText(fileStatus.toString())*/
-      //Allows the ActionBar to condense when we scroll
-   // coordinateMotion()
+
+        /*val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.cancel(0)*/
         FAB.setOnClickListener {
             val returnIntent = Intent(this, MainActivity::class.java)
             startActivity(returnIntent)
@@ -41,14 +40,4 @@ class DetailActivity : AppCompatActivity() {
 
     }
 
-/*    private fun coordinateMotion() {
-        val appBarLayout: AppBarLayout = findViewById(R.id.appBarLayout)
-        val motionLayout: MotionLayout = findViewById(R.id.motionLayout)
-
-        val listener = AppBarLayout.OnOffsetChangedListener { unused, verticalOffset ->
-            val seekPosition = -verticalOffset / appBarLayout.totalScrollRange.toFloat()
-            motionLayout.progress = seekPosition
-        }
-        appBarLayout.addOnOffsetChangedListener(listener)
-    }*/
 }

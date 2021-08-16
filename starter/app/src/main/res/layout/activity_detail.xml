@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- MotionLayout is a subclass of constraint layout so we can still use constraint layout properties -->
 
-
-
+<!-- TODO: Design tool acting glitchy with MotionLayout unlike ConstraintLayout
+    can't properly align views. Is it something with my MotionScene?-->
     <androidx.constraintlayout.motion.widget.MotionLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -13,23 +13,24 @@
         app:layoutDescription="@xml/activity_detail_scene"
         tools:context=".DetailActivity">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBarLayout"
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="?attr/colorPrimary"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-        </com.google.android.material.appbar.AppBarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/FAB"
@@ -37,15 +38,13 @@
         android:layout_height="wrap_content"
         android:src="@drawable/abc_vector_test"
         android:visibility="visible"
-        tools:layout_editor_absoluteX="205dp"
-        tools:layout_editor_absoluteY="461dp" />
+        tools:layout_editor_absoluteX="177dp"
+        tools:layout_editor_absoluteY="420dp" />
 
     <TextView
         android:id="@+id/fileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
         android:text="@string/file_name"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
@@ -53,30 +52,28 @@
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
 
     <TextView
+        android:id="@+id/fileNameEntry"
+        android:layout_width="123dp"
+        android:layout_height="94dp"
+
+        android:layout_marginTop="236dp"
+        android:textSize="@dimen/default_text_size"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.683"
+        app:layout_constraintStart_toEndOf="@+id/fileName"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <TextView
         android:id="@+id/status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="228dp"
-        android:layout_marginTop="16dp"
+
         android:text="@string/status"
         android:textSize="@dimen/default_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/fileName"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/fileNameEntry"
-        app:layout_constraintVertical_bias="0.084" />
-
-    <TextView
-            android:id="@+id/fileNameEntry"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="50dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="16dp"
-            android:textSize="@dimen/default_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/fileName"
-            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-            />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
         android:id="@+id/statusEntry"
@@ -84,7 +81,7 @@
         android:layout_height="wrap_content"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="@+id/motionLayout"
+        app:layout_constraintHorizontal_bias="0.607"
         app:layout_constraintStart_toEndOf="@+id/status"
-        tools:layout_editor_absoluteY="232dp" />
-
+        tools:layout_editor_absoluteY="93dp" />
 </androidx.constraintlayout.motion.widget.MotionLayout>
