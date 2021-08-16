@@ -3,19 +3,17 @@ package com.udacity
 import android.animation.ObjectAnimator
 import android.content.Context
 import android.graphics.Canvas
-import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.View
 import kotlin.properties.Delegates
 
+//implementation idea from https://github.com/anadhima/LoadApp/blob/master/app/src/main/java/com/udacity/LoadingButton.kt
 class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-
-    //new code
     private var progress = 0f
     private var progressAngle = 0f
     private var buttonText = ""
@@ -24,13 +22,10 @@ class LoadingButton @JvmOverloads constructor(
 
     private var circleColor = 0
 
-    private var buttonAnimator = ObjectAnimator()
+    private var loadingBarAnimator = ObjectAnimator()
     private var circleAnimator = ObjectAnimator()
 
-
-
-    private val paintButton = Paint()
-    private val paintCircle = Paint()
+    private val paintObject = Paint()
 
     // KProperty<*>, ButtonState, ButtonState  "kproperty" - Represents a property, such as a named val or var declaration.
     // Instances of this class are obtainable by the :: operator.
@@ -43,13 +38,14 @@ class LoadingButton @JvmOverloads constructor(
     letting us reuse this logic.
     source: https://proandroiddev.com/kotlin-delegates-in-android-1ab0a715762d
      */
+
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
         when (new) {
             ButtonState.Loading -> {
                 buttonText = " LOADING..."
                 // button animation set up //.ofFloat(0f, measuredWidth.toFloat())
                 //buttonAnimator = ObjectAnimator()
-                    buttonAnimator.apply {
+                    loadingBarAnimator.apply {
                         setObjectValues(0F,3600F)
                         setDuration(2000)
                         repeatMode = ObjectAnimator.RESTART
@@ -81,7 +77,7 @@ class LoadingButton @JvmOverloads constructor(
                 buttonText = "FINISHED"
 
                 //ends animation
-                buttonAnimator.end()
+                loadingBarAnimator.end()
                 circleAnimator.end()
             }
             else -> {
@@ -91,19 +87,23 @@ class LoadingButton @JvmOverloads constructor(
         }
     }
 
+    init {
+        //isClickable = true
+        buttonText = "DOWNLOAD"
+        buttonState = ButtonState.Clicked
+
+        //Use  https://developer.android.com/reference/kotlin/android/util/AttributeSet
+        context.theme.obtainStyledAttributes(attrs, R.styleable.customButton, 0, 0).apply {
+            buttonBackgroundColor = getColor(R.styleable.customButton_buttonColor, 0)
+            circleColor = getColor(R.styleable.customButton_circleColor,0)
+        }
+
+        paintObject.color = buttonBackgroundColor
+    }
+
     override fun performClick(): Boolean {
         if (super.performClick()) return true
 
-        if (buttonState == ButtonState.Completed)
-        {
-            buttonAnimator.isPaused
-            circleAnimator.isPaused
-        }
-        when (buttonState) {
-            buttonState -> ButtonState.Clicked
-            buttonState -> ButtonState.Loading
-            else -> ButtonState.Completed
-        }
         //redraw
         if (buttonState != ButtonState.Completed)
         invalidate()
@@ -111,33 +111,19 @@ class LoadingButton @JvmOverloads constructor(
         return true
     }
 
-    init {
-        //isClickable = true
-        buttonText = "DOWNLOAD"
-        buttonState = ButtonState.Clicked
 
-        //Use  https://developer.android.com/reference/kotlin/android/util/AttributeSet
-
-        context.theme.obtainStyledAttributes(attrs, R.styleable.customButton, 0, 0).apply {
-            buttonBackgroundColor = getColor(R.styleable.customButton_buttonColor, 0)
-            circleColor = getColor(R.styleable.customButton_circleColor,0)
-        }
-
-        paintButton.color = buttonBackgroundColor
-        paintCircle.color = circleColor
-    }
 
     override fun onDraw(canvas: Canvas?) {
-        paintButton.color = buttonBackgroundColor
+        paintObject.color = buttonBackgroundColor
 
         super.onDraw(canvas)
-        canvas!!.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), paintButton)
+        canvas!!.drawRect(0f, 0f, measuredWidth.toFloat(), measuredHeight.toFloat(), paintObject)
 
-        paintButton.color = context.getColor(R.color.colorPrimaryDark)
-        canvas.drawRect(0f, 0f, progress, measuredHeight.toFloat(), paintButton)
+        paintObject.color = context.getColor(R.color.colorPrimaryDark)
+        canvas.drawRect(0f, 0f, progress, measuredHeight.toFloat(), paintObject)
 
         //change color for text
-        paintButton.apply {
+        paintObject.apply {
             color = context.getColor(R.color.black)
             textAlign = Paint.Align.CENTER
             textSize = 60f
@@ -148,16 +134,19 @@ class LoadingButton @JvmOverloads constructor(
             buttonText,
             (measuredWidth / 2).toFloat(),
             (measuredHeight / 2).toFloat(),
-            paintButton
+            paintObject
         )
+        //white
+        paintObject.color = circleColor
 
         //Q: Can I draw a filled progress circle with canvas.drawCircle?
+        //saw how to draw arc from: https://github.com/paul77uk/ND940C3-Project/blob/master/app/src/main/java/com/udacity/LoadingButton.kt
         canvas.drawArc(//left, top, right, bottom, start angle, sweep angle, use center, Paint
             measuredWidth - 100f,
             (measuredHeight / 2) - 50f,
             measuredWidth - 50f,
             (measuredHeight / 2) + 50f,
-            180f, progressAngle, true, paintCircle
+            180f, progressAngle, true, paintObject
         )
     }
 
